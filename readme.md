@@ -1,3 +1,1 @@
-## VCTK-Demand
-
-DNS2020
+# TFDense-GAN
