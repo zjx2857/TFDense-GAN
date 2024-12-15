@@ -1,0 +1,69 @@
+
+/* 基础样式 */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* 外部容器：使表格横向排列 */
+.table-wrapper {
+  display: flex; /* 横向排列 */
+  flex-wrap: wrap; /* 宽度不足时换行 */
+  justify-content: space-around; /* 两端对齐，留出间距 */
+  margin: 20px;
+}
+
+/* 每个表格 */
+.table-container {
+  flex: 0 1 calc(45% - 20px); /* 每个表格宽度，留出间隔 */
+  margin: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #3F64B4;
+  color: white;
+}
+
+audio {
+  width: 100%;
+  margin: 5px 0;
+}
+
+img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+p.authors {
+  text-align: center;
+  font-size: 1.1em;
+  margin: 10px auto;
+  color: #444;
+}

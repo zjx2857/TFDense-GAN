@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech and Spectrogram Viewer</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <!-- 标题 -->
+  <h1>TFDense-GAN: a Generative Adversarial Network for Single-Channel Speech Enhancement</h1>
+
+  <!-- 作者信息 -->
+  <h2>Authors</h2>
+  <p class="authors">
+      Author Haoxiang Chen, Jinxiu Zhang, Yaogang Fu, Xintong Zhou, Ruilong Wang, Yanyan Xu, Dengfeng Ke
+  </p>
+
+  <!-- 简介 -->
+  <h2>Abstract</h2>
+  <p>
+    Research indicates that utilizing the spectrum in the time-frequency domain plays a crucial role in speech enhancement tasks, as it can better extract audio features and reduce computational consumption. For the speech enhancement methods in the time-frequency domain, the introduction of attention mechanisms and the application of DenseBlock have yielded promising results. In particular, the Unet architecture, which comprises three main components, the encoder, the decoder, and the bottleneck, employs DenseBlock in both the encoder and the decoder to achieve powerful feature fusion capabilities with fewer parameters. In this paper, in order to enhance the advantages of the aforementioned methods for speech enhancement, we propose a Unet-based time-frequency domain denoising model called TFDense-Net. It utilizes our improved DenseBlock for feature extraction in both the encoder and the decoder, and employs an attention mechanism in the bottleneck for feature fusion and denoising. The model has demonstrated excellent performance for speech enhancement tasks, achieving significant improvements in the Si-SDR metric compared to other state-of-the-art models. Additionally, to further enhance the denoising performance and increase the receptive field of the model, we introduce a multi-spectrogram discriminator based on multiple STFTs. Since the discriminator loss can observe the correlations between spectra that traditional loss functions cannot detect, we train TFDense-Net as a generator against the multi-spectrogram discriminator, resulting in a significant improvement in the denoising performance, and we name this enhanced model TFDense-GAN. We evaluate our proposed TFDense-Net and TFDense-GAN on two public datasets: the VCTK + DEMAND dataset and the Interspeech Deep Noise Suppression Challenge dataset. Experimental results show that TFDense-GAN outperforms most existing models in terms of STOI, PESQ, and Si-SDR, achieving state-of-the-art results.
+  </p>
+
+  <!-- Demo 部分 -->
+  <h2>Speech enhancement demo(on the DNS2020)</h2>
+<!-- 外部容器 -->
+<div class="table-wrapper">
+<!-- 表格1：Noisy Input -->
+  <div class="table-container">
+      <table> 
+        <h3>fileid_14</h3>
+        <thead>
+            <tr>
+                <th>Method</th>
+                <th>Audio</th>
+                <th>Spectrogram</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Noisy 音频 -->
+            <tr>
+                <td>Noisy Input</td>
+                <td>
+                    <audio controls>
+                        <source src="./data/fileid_14/noisy.wav" type="audio/wav">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <img src="./data/fileid_14/noisy.png" alt="Noisy Spectrogram" width="300">
+                </td>
+            </tr>
+
+            <!-- Clean 音频 -->
+            <tr>
+                <td>Clean Target</td>
+                <td>
+                    <audio controls>
+                        <source src="./data/fileid_14/clean.wav" type="audio/wav">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <img src="./data/fileid_14/clean.png" alt="Clean Spectrogram" width="300">
+                </td>
+            </tr>
+
+            <!-- FRCRN 音频 -->
+            <tr>
+                <td>FRCRN Output</td>
+                <td>
+                    <audio controls>
+                        <source src="./data/fileid_14/FRCRN.wav" type="audio/wav">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <img src="./data/fileid_14/FRCRN.png" alt="FRCRN Spectrogram" width="300">
+                </td>
+            </tr>
+
+            <!-- GaGNet 音频 -->
+            <tr>
+                <td>GaGNet Output</td>
+                <td>
+                    <audio controls>
+                        <source src="./data/fileid_14/GaGNet.wav" type="audio/wav">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <img src="./data/fileid_14/GaGNet.png" alt="GaGNet Spectrogram" width="300">
+                </td>
+            </tr>
+
+            <!-- MFNet 音频 -->
+            <tr>
+                <td>MFNet Output</td>
+                <td>
+                    <audio controls>
+                        <source src="./data/fileid_14/MFNet.wav" type="audio/wav">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <img src="./data/fileid_14/MFNet.png" alt="MFNet Spectrogram" width="300">
+                </td>
+            </tr>
+
+            <!-- TFDenseGAN 音频 -->
+            <tr>
+                <td>TFDenseGAN Output</td>
+                <td>
+                    <audio controls>
+                        <source src="./data/fileid_14/TFDenseGAN.wav" type="audio/wav">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <img src="./data/fileid_14/TFDenseGAN.png" alt="TFDenseGAN Spectrogram" width="300">
+                </td>
+            </tr>
+
+            <!-- TFDenseNet 音频 -->
+            <tr>
+                <td>TFDenseNet Output</td>
+                <td>
+                    <audio controls>
+                        <source src="./data/fileid_14/TFDenseNet.wav" type="audio/wav">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <img src="./data/fileid_14/TFDenseNet.png" alt="TFDenseNet Spectrogram" width="300">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+  <div class="table-container">
+    <h3>fileid_48</h3>
+    <table>
+      <thead>
+          <tr>
+              <th>Method</th>
+              <th>Audio</th>
+              <th>Spectrogram</th>
+          </tr>
+      </thead>
+      <tbody>
+          <!-- Noisy Input -->
+          <tr>
+              <td>Noisy Input</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_48/noisy.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_48/noisy.png" alt="Noisy Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- Clean Target -->
+          <tr>
+              <td>Clean Target</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_48/clean.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_48/clean.png" alt="Clean Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- FRCRN Output -->
+          <tr>
+              <td>FRCRN Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_48/FRCRN.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_48/FRCRN.png" alt="FRCRN Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- GaGNet Output -->
+          <tr>
+              <td>GaGNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_48/GaGNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_48/GaGNet.png" alt="GaGNet Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- MFNet Output -->
+          <tr>
+              <td>MFNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_48/MFNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_48/MFNet.png" alt="MFNet Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- TFDenseGAN Output -->
+          <tr>
+              <td>TFDenseGAN Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_48/TFDenseGAN.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_48/TFDenseGAN.png" alt="TFDenseGAN Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- TFDenseNet Output -->
+          <tr>
+              <td>TFDenseNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_48/TFDenseNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_48/TFDenseNet.png" alt="TFDenseNet Spectrogram" width="300">
+              </td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-container">
+    <h3>fileid_88</h3>
+    <table>
+      <thead>
+          <tr>
+              <th>Method</th>
+              <th>Audio</th>
+              <th>Spectrogram</th>
+          </tr>
+      </thead>
+      <tbody>
+          <!-- Noisy Input -->
+          <tr>
+              <td>Noisy Input</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_88/noisy.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_88/noisy.png" alt="Noisy Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- Clean Target -->
+          <tr>
+              <td>Clean Target</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_88/clean.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_88/clean.png" alt="Clean Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- FRCRN Output -->
+          <tr>
+              <td>FRCRN Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_88/FRCRN.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_88/FRCRN.png" alt="FRCRN Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- GaGNet Output -->
+          <tr>
+              <td>GaGNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_88/GaGNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_88/GaGNet.png" alt="GaGNet Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- MFNet Output -->
+          <tr>
+              <td>MFNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_88/MFNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_88/MFNet.png" alt="MFNet Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- TFDenseGAN Output -->
+          <tr>
+              <td>TFDenseGAN Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_88/TFDenseGAN.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_88/TFDenseGAN.png" alt="TFDenseGAN Spectrogram" width="300">
+              </td>
+          </tr>
+
+          <!-- TFDenseNet Output -->
+          <tr>
+              <td>TFDenseNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_88/TFDenseNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_88/TFDenseNet.png" alt="TFDenseNet Spectrogram" width="300">
+              </td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-container">
+    <table>
+      <h3>fileid_112</h3>
+      <thead>
+          <tr>
+              <th>Method</th>
+              <th>Audio</th>
+              <th>Spectrogram</th>
+          </tr>
+      </thead>
+      <tbody>
+          <!-- Noisy Input -->
+          <tr>
+              <td>Noisy Input</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_112/noisy.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_112/noisy.png" alt="Noisy Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- Clean Target -->
+          <tr>
+              <td>Clean Target</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_112/clean.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_112/clean.png" alt="Clean Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- FRCRN Output -->
+          <tr>
+              <td>FRCRN Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_112/FRCRN.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_112/FRCRN.png" alt="FRCRN Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- GaGNet Output -->
+          <tr>
+              <td>GaGNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_112/GaGNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_112/GaGNet.png" alt="GaGNet Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- MFNet Output -->
+          <tr>
+              <td>MFNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_112/MFNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_112/MFNet.png" alt="MFNet Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- TFDenseGAN Output -->
+          <tr>
+              <td>TFDenseGAN Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_112/TFDenseGAN.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_112/TFDenseGAN.png" alt="TFDenseGAN Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- TFDenseNet Output -->
+          <tr>
+              <td>TFDenseNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_112/TFDenseNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_112/TFDenseNet.png" alt="TFDenseNet Spectrogram" width="300">
+              </td>
+          </tr>
+      </tbody>
+  </table>
+  </div>
+  <div class="table-container">
+    <table>
+      <h3>fileid_156</h3>
+      <thead>
+          <tr>
+              <th>Method</th>
+              <th>Audio</th>
+              <th>Spectrogram</th>
+          </tr>
+      </thead>
+      <tbody>
+          <!-- Noisy Input -->
+          <tr>
+              <td>Noisy Input</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_156/noisy.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_156/noisy.png" alt="Noisy Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- Clean Target -->
+          <tr>
+              <td>Clean Target</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_156/clean.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_156/clean.png" alt="Clean Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- FRCRN Output -->
+          <tr>
+              <td>FRCRN Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_156/FRCRN.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_156/FRCRN.png" alt="FRCRN Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- GaGNet Output -->
+          <tr>
+              <td>GaGNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_156/GaGNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_156/GaGNet.png" alt="GaGNet Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- MFNet Output -->
+          <tr>
+              <td>MFNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_156/MFNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_156/MFNet.png" alt="MFNet Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- TFDenseGAN Output -->
+          <tr>
+              <td>TFDenseGAN Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_156/TFDenseGAN.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_156/TFDenseGAN.png" alt="TFDenseGAN Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- TFDenseNet Output -->
+          <tr>
+              <td>TFDenseNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_156/TFDenseNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_156/TFDenseNet.png" alt="TFDenseNet Spectrogram" width="300">
+              </td>
+          </tr>
+      </tbody>
+  </table>
+  </div>
+  <div class="table-container">
+    <table>
+      <h3>fileid_285</h3>
+      <thead>
+          <tr>
+              <th>Method</th>
+              <th>Audio</th>
+              <th>Spectrogram</th>
+          </tr>
+      </thead>
+      <tbody>
+          <!-- Noisy Input -->
+          <tr>
+              <td>Noisy Input</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_285/noisy.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_285/noisy.png" alt="Noisy Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- Clean Target -->
+          <tr>
+              <td>Clean Target</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_285/clean.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_285/clean.png" alt="Clean Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- FRCRN Output -->
+          <tr>
+              <td>FRCRN Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_285/FRCRN.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_285/FRCRN.png" alt="FRCRN Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- GaGNet Output -->
+          <tr>
+              <td>GaGNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_285/GaGNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_285/GaGNet.png" alt="GaGNet Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- MFNet Output -->
+          <tr>
+              <td>MFNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_285/MFNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_285/MFNet.png" alt="MFNet Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- TFDenseGAN Output -->
+          <tr>
+              <td>TFDenseGAN Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_285/TFDenseGAN.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_285/TFDenseGAN.png" alt="TFDenseGAN Spectrogram" width="300">
+              </td>
+          </tr>
+  
+          <!-- TFDenseNet Output -->
+          <tr>
+              <td>TFDenseNet Output</td>
+              <td>
+                  <audio controls>
+                      <source src="./data/fileid_285/TFDenseNet.wav" type="audio/wav">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <img src="./data/fileid_285/TFDenseNet.png" alt="TFDenseNet Spectrogram" width="300">
+              </td>
+          </tr>
+      </tbody>
+  </table>
+  
+  </div>
+</div>
+
+</body>
+</html>
